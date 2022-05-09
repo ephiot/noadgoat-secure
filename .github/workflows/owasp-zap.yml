@@ -1,0 +1,25 @@
+name: owasp-zap
+
+on:
+#  push:
+#    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: Scan ZAP website
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: main
+      - name: ZAP Scan
+        uses: zaproxy/action-baseline@v0.6.1
+        with:
+          fail_action: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target: 'https://nodegoat.net/'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
